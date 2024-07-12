@@ -1,0 +1,220 @@
+#back_Button {
+  background-size: cover;
+  background-color: transparent;
+  width: 80px;
+  height: 80px;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  filter: drop-shadow(2px 2px 2px rgba(98,  98,  98,  0.5));
+  position: absolute;
+  bottom: 5%;
+  left: 5%;
+
+  background-image: url("assets/back button.png");
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk&display=swap");
+
+:root {
+  --cube-size: 150px;
+  --text-size: 40px;
+  --border-size: 20px;
+  --gap: 1.8;
+  --main-color: #dc64ff;
+  --main-color-transparent: rgba(220, 100, 255, 0.4);
+  --translateYLeft: 0;
+  --translateYRight: 0;
+  --duration: 1.7s;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --cube-size: 100px;
+    --text-size: 20px;
+    --border-size: 15px;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Center content vertically */
+  height: 100vh;
+  margin: 0; /* Ensure no margin on body */
+  font-family: "Space Grotesk", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  color: white;
+  background-color: black;
+  overflow: hidden;
+}
+
+.background {
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 200%;
+  height: 200%;
+  background-color: black;
+
+  background-size: 16px 20px;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.text {
+  margin: 20px 0 0;
+  font-size: var(--text-size);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+.progress-bar-container {
+  position: absolute;
+  bottom: 20px;
+  width: 80%;
+  text-align: center;
+}
+
+.progress-bar-container progress {
+  width: 100%;
+  height: 20px;
+}
+
+.progress-bar-container label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.cube {
+  position: relative;
+  z-index: 2;
+  transform-style: preserve-3d;
+  transform: rotateX(20deg) rotateY(-135deg);
+  animation: cubeRotation var(--duration) cubic-bezier(0, 0.5, 0.7, 1) infinite;
+  bottom: 200px;
+}
+
+.cube,
+.bottom,
+.side {
+  width: var(--cube-size);
+  height: var(--cube-size);
+}
+
+.bottom,
+.side {
+  position: absolute;
+}
+
+.bottom {
+  background-color: var(--main-color);
+  border-radius: 5px;
+  box-shadow: 0 0 200px 0 var(--main-color-transparent);
+  transform: translateY(calc(var(--cube-size) / var(--gap))) rotateX(-90deg);
+}
+
+.side {
+  display: flex;
+}
+
+.side::after {
+  content: "";
+  width: 100%;
+  height: 100%;
+  background-color: rgba(232, 209, 209, 0);
+  border: var(--border-size) solid var(--main-color);
+  border-radius: 5px;
+  box-shadow: 0 0 200px 0 var(--main-color-transparent);
+}
+
+.back {
+  transform: translateZ(calc(var(--cube-size) / var(--gap) * -1))
+    rotateY(180deg);
+}
+
+.back::after {
+  animation: cubeSideOut var(--duration) cubic-bezier(0.5, 1, 0.5, 1) infinite
+    both;
+}
+
+.left {
+  transform: translateX(calc(var(--cube-size) / var(--gap) * -1))
+    rotateY(-90deg);
+  display: none;
+}
+
+.right {
+  transform: translateX(calc(var(--cube-size) / var(--gap))) rotateY(90deg);
+}
+
+.right::after {
+  animation: cubeSideIn var(--duration) cubic-bezier(0.5, 1, 0.5, 1) infinite
+    both;
+}
+
+.front {
+  transform: translateZ(calc(var(--cube-size) / var(--gap)));
+  display: none;
+}
+
+@keyframes cubeRotation {
+  0%,
+  80% {
+    transform: rotateX(20deg) rotateY(-135deg);
+  }
+
+  100% {
+    transform: rotateX(20deg) rotateY(-45deg);
+  }
+}
+
+@keyframes cubeSideIn {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+
+  25%,
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes cubeSideOut {
+  0%,
+  60% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}
+
+@keyframes movingGradient {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translate(50%, 50%);
+  }
+}
