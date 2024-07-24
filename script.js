@@ -298,15 +298,18 @@ loader.load(
 
     // monitor 2 //
 
-    texture_loader.load("assets/desktop image.jpg", function (texture_2) {
-      const monitor_2 = planes["Object_290"];
-      if (monitor_2) {
-        // Update the material of the plane with the loaded texture
-        monitor_2.material.map = texture_2;
-        monitor_2.material.needsUpdate = true; // Ensure the material is updated
+    texture_loader.load(
+      "assets/Screenshot 2024-07-24 143705.png",
+      function (texture_2) {
+        const monitor_2 = planes["Object_290"];
+        if (monitor_2) {
+          // Update the material of the plane with the loaded texture
+          monitor_2.material.map = texture_2;
+          monitor_2.material.needsUpdate = true; // Ensure the material is updated
+        }
+        texture_2.colorSpace = THREE.SRGBColorSpace;
       }
-      texture_2.colorSpace = THREE.SRGBColorSpace;
-    });
+    );
 
     // book texture //
 
