@@ -683,7 +683,7 @@ function onMouseClick(event) {
       back_Button.addEventListener("click", handleBackButtonClick_2);
     } else if (object === plane_4) {
       console.log("clicked on document link");
-      window.open("assets/Profile.pdf", "_blank");
+      window.open("assets/resume.pdf", "_blank");
     } else if (object.name === "Object_157") {
       console.log("clicked on audio link");
       const audio = document.querySelector("#audio");
