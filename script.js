@@ -840,6 +840,7 @@ rectarea_light4.position.set(0, -8, 27);
 rectarea_light4.rotation.x = -Math.PI / 4;
 
 const rectarea_light5 = new THREE.RectAreaLight(0xd90166, 50, 26, 0.2);
+
 scene.add(rectarea_light5);
 
 rectarea_light5.position.set(23, 3, 27);
@@ -884,6 +885,9 @@ function onWindowResize() {
 
 // Orbit controls
 const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true; // Enable damping
+controls.dampingFactor = 0.05; // Adjust the damping factor (lower values = more damping)
+controls.update(); // Ensure the controls are up to date
 // controls.minDistance = 23;
 // controls.maxDistance = 70;
 // controls.minPolarAngle = Math.PI * 0.3;
