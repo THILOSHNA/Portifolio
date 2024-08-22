@@ -687,15 +687,15 @@ function onMouseClick(event) {
     } else if (object === plane_4) {
       console.log("clicked on document link");
       window.open("assets/resume.pdf", "_blank");
-    } else if (object.name === "Object_157") {
-      console.log("clicked on audio link");
-      const audio = document.querySelector("#audio");
-      if (audio) {
-        audio.play();
-      } else {
-        console.error("Audio element not found");
-      }
-    }
+    // } else if (object.name === "Object_157") {
+    //   console.log("clicked on audio link");
+    //   const audio = document.querySelector("#audio");
+    //   if (audio) {
+    //     audio.play();
+    //   } else {
+    //     console.error("Audio element not found");
+    //   }
+    // }
   } else {
     console.log("No intersection with frame children");
   }
