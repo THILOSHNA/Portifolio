@@ -137,7 +137,7 @@ const loader = new GLTFLoader(loadingManager);
 let room;
 
 loader.load(
-  "models/gaming_room (1).glb",
+  "models/gaming_room.glb",
   function (gltf) {
     room = gltf.scene;
     room.position.set(0, -9, 0);
