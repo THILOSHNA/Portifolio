@@ -873,7 +873,7 @@ function animate() {
         stats.update();
     }
     if (mixer) {
-        mixer.update(0.05); // Pass delta time (0.01 is just an example)
+        mixer.update(0.03); // Pass delta time (0.01 is just an example)
     }
 }
 
