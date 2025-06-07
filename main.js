@@ -39,6 +39,13 @@ const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
 
+const css3DRenderer = new CSS3DRenderer();
+css3DRenderer.setSize(window.innerWidth, window.innerHeight);
+css3DRenderer.domElement.style.position = 'absolute';
+css3DRenderer.domElement.style.top = 0;
+css3DRenderer.domElement.style.pointerEvents = 'none'; // Ensure CSS3D doesn't block interactions
+document.body.appendChild(css3DRenderer.domElement);    
+
 //
 // //------------ Loading Manager
 //
@@ -296,16 +303,29 @@ loader.load(
 
     // monitor 1 //
     const texture_loader = new THREE.TextureLoader(loadingManager);
-    texture_loader.load("assets/desktop 2.jpg", function (texture) {
-      const monitor_1 = planes["Object_287"];
-      if (monitor_1) {
-        // Update the material of the plane with the loaded texture
-        monitor_1.material.map = texture;
-        monitor_1.material.needsUpdate = true; // Ensure the material is updated
-      }
-      texture.colorSpace = THREE.SRGBColorSpace;
-    });
+    // ...existing code...
+texture_loader.load("assets/desktop 2.jpg", function (texture) {
+  const monitor_1 = planes["Object_287"];
+  if (monitor_1) {
+    // Update the material of the plane with the loaded texture
+    monitor_1.material.map = texture;
+    monitor_1.material.needsUpdate = true; // Ensure the material is updated
 
+    // Create and attach CSS3DObject to monitor_1
+    const iframeElement = document.createElement('iframe');
+    iframeElement.src = 'desktop.html';
+    iframeElement.style.width = '580px';
+    iframeElement.style.height = '345px';
+    iframeElement.style.border = 'none';
+
+    const cssObject = new CSS3DObject(iframeElement);
+    cssObject.position.set(0, 0, 0.002); // Slightly in front of the plane
+    cssObject.scale.set(0.001, 0.001, 0.001); // Adjust as needed
+    monitor_1.add(cssObject);
+  }
+  texture.colorSpace = THREE.SRGBColorSpace;
+});
+// ...existing code...
     // monitor 2 //
 
     texture_loader.load(
@@ -575,6 +595,7 @@ function onMouseClick(event) {
         onUpdate: function () {
           controls.update();
         },
+        
       });
 
       gsap.to(camera.position, {
@@ -582,6 +603,10 @@ function onMouseClick(event) {
         y: -0.43,
         z: 2,
         duration: 0.9,
+        onUpdate: function () {},
+        onComplete: function () {
+          controls.enabled = false; // Disable controls after moving to the next view
+        }
       });
 
       // Display the back button
@@ -814,14 +839,30 @@ scene.add(point_light4);
 // scene.add(pointLightHelper_4);
 
 
+
+// // Create and add CSS3DObject
+// const iframeElement = document.createElement('iframe');
+// iframeElement.src = 'desktop.html';
+// iframeElement.style.width = '600px';  // Adjust size
+// iframeElement.style.height = '320px'; // Adjust size
+
+// const cssObject = new CSS3DObject(iframeElement);
+// // cssObject.position.set(0, 0, 0);
+
+// cssObject.position.set(8.5, -0.6, 6);
+// cssObject.rotation.y = Math.PI / 1.8; // Rotate to face the camera
+// cssObject.scale.set(0.01, 0.01, 0.01); // Adjust scale to match model size
+// scene.add(cssObject);
+
 // Window resize handler
 window.addEventListener("resize", onWindowResize);
-function onWindowResize() {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setPixelRatio(window.devicePixelRatio);
+  function onWindowResize() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    css3DRenderer.setSize(window.innerWidth, window.innerHeight);
 }
 
 // Orbit controls
@@ -829,13 +870,13 @@ const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true; // Enable damping
 controls.dampingFactor = 0.05; // Adjust the damping factor (lower values = more damping)
 controls.update(); // Ensure the controls are up to date
-controls.minDistance = 23;
+// controls.minDistance = 23;
 controls.maxDistance = 100;
-controls.minPolarAngle = Math.PI * 0.3;
-controls.maxPolarAngle = Math.PI * 0.46;
+controls.minPolarAngle = Math.PI * 0.2;
+controls.maxPolarAngle = Math.PI * 0.49;
 
-controls.minAzimuthAngle = -Math.PI / 2; 
-controls.maxAzimuthAngle = Math.PI / 7;
+// controls.minAzimuthAngle = -Math.PI / 2; 
+// controls.maxAzimuthAngle = Math.PI / 7;
 
 // Stats setup
 const stats = new Stats();
@@ -867,7 +908,7 @@ function animate() {
 
         // Render both WebGL and CSS3D scenes
         renderer.render(scene, camera);
-        // css3DRenderer.render(scene, camera);
+        css3DRenderer.render(scene, camera);
 
         // Update stats
         stats.update();
