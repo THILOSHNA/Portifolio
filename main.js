@@ -358,7 +358,7 @@ loader.load(
           iframeElement.style.pointerEvents = 'auto';
 
           const cssObject = new CSS3DObject(iframeElement);
-          cssObject.position.set(0.3, -0.19, 0.02); // Slightly in front of the plane
+          cssObject.position.set(0.3, -0.19, 0.002); // Slightly in front of the plane
           cssObject.scale.set(0.001, 0.001, 0.001); // Adjust as needed
 
           monitor_2.add(cssObject);
