@@ -300,42 +300,68 @@ loader.load(
     scene.add(plane_5);
 
     // loading texture for a moniter //
-
     // monitor 1 //
     const texture_loader = new THREE.TextureLoader(loadingManager);
-    // ...existing code...
-texture_loader.load("assets/desktop 2.jpg", function (texture) {
-  const monitor_1 = planes["Object_287"];
-  if (monitor_1) {
-    // Update the material of the plane with the loaded texture
-    monitor_1.material.map = texture;
-    monitor_1.material.needsUpdate = true; // Ensure the material is updated
+    texture_loader.load("assets/desktop 2.jpg", function (texture) {
+        const monitor_1 = planes["Object_287"];
+        if (monitor_1) {
+        monitor_1.material.map = texture;
+        monitor_1.material.needsUpdate = true;   
+      }
+      texture.colorSpace = THREE.SRGBColorSpace;
+    });
 
-    // Create and attach CSS3DObject to monitor_1
-    const iframeElement = document.createElement('iframe');
-    iframeElement.src = 'desktop.html';
-    iframeElement.style.width = '580px';
-    iframeElement.style.height = '345px';
-    iframeElement.style.border = 'none';
-
-    const cssObject = new CSS3DObject(iframeElement);
-    cssObject.position.set(0, 0, 0.002); // Slightly in front of the plane
-    cssObject.scale.set(0.001, 0.001, 0.001); // Adjust as needed
-    monitor_1.add(cssObject);
-  }
-  texture.colorSpace = THREE.SRGBColorSpace;
-});
-// ...existing code...
     // monitor 2 //
+    // Set up raycaster for detecting when mouse is over the iframe area
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
 
+    function onMouseMove(event) {
+        // Calculate mouse position
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        
+        // Update raycaster
+        raycaster.setFromCamera(mouse, camera);
+        
+        // Check if mouse is over the monitor plane
+        const intersects = raycaster.intersectObject(monitor_2, true);
+        
+        if (intersects.length > 0) {
+            // Mouse is over the iframe area - disable WebGL pointer events
+            renderer.domElement.style.pointerEvents = 'none';
+            css3DRenderer.domElement.style.pointerEvents = 'auto';
+        } else {
+            // Mouse is not over iframe - enable WebGL pointer events
+            renderer.domElement.style.pointerEvents = 'auto';
+            css3DRenderer.domElement.style.pointerEvents = 'none';
+        }
+    }
+
+    window.addEventListener('mousemove', onMouseMove);
+
+    // monitor 2 //
+    const monitor_2 = planes["Object_290"];
     texture_loader.load(
       "assets/Screenshot 2024-07-24 143705.png",
       function (texture_2) {
-        const monitor_2 = planes["Object_290"];
         if (monitor_2) {
           // Update the material of the plane with the loaded texture
           monitor_2.material.map = texture_2;
           monitor_2.material.needsUpdate = true; // Ensure the material is updated
+
+          const iframeElement = document.createElement('iframe');
+          iframeElement.src = 'desktop.html';
+          iframeElement.style.width = '1180px';
+          iframeElement.style.height = '720px';
+          iframeElement.style.border = 'none';
+          iframeElement.style.pointerEvents = 'auto';
+
+          const cssObject = new CSS3DObject(iframeElement);
+          cssObject.position.set(0.3, -0.19, 0.02); // Slightly in front of the plane
+          cssObject.scale.set(0.001, 0.001, 0.001); // Adjust as needed
+
+          monitor_2.add(cssObject);
         }
         texture_2.colorSpace = THREE.SRGBColorSpace;
       }
